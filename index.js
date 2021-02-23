@@ -6,6 +6,8 @@ const mainNavigation = require('./src/routes')
 const multer = require('multer')
 const { port } = require('./src/configs')
 const cors = require('cors')
+const swaggerUi = require('swagger-ui-express'),
+    swaggerDocument = require('./swagger.json');
 // const redis = require('redis')
 
 // var corsOptions = {
@@ -40,4 +42,4 @@ app.use(bodyParser.urlencoded({
     extended: true
 }))
 
-app.use('/', mainNavigation)
+app.use('/', mainNavigation, swaggerUi.serve, swaggerUi.setup(swaggerDocument))

@@ -6,30 +6,22 @@ module.exports = {
     return new Promise((resolve, reject) => {
       // @ts-ignore
       const firstData = ((limit * activePage) - limit)
-      if (urutkan) {
-        connection.query(`SELECT products.*, category.name_category FROM products LEFT JOIN category ON products.id_category = category.id  WHERE category.name_category LIKE '${urutkan}'
-        ORDER BY ${sortBy} ${orderBy}`,
-          (error, result) => {
-            // @ts-ignore
-            if (error) reject(new Error(error))
-            resolve(result)
-          })
-      } if (limit) {
-        connection.query(`SELECT products.*, category.name_category FROM products LEFT JOIN category ON products.id_category = category.id ORDER BY ${sortBy} ${orderBy} LIMIT ${firstData}, ${limit} `,
-          (error, result) => {
-            // @ts-ignore
-            if (error) reject(new Error(error))
-            resolve(result)
-          })
-      } else {
-        connection.query(`SELECT products.*, category.name_category FROM products LEFT JOIN category ON products.id_category = category.id  AND products.name LIKE '%${searchName}%' AND products.id_category LIKE '%${idCat}%'
-        ORDER BY ${sortBy} ${orderBy}`,
+      if (limit) {
+        console.log(`SELECT products.*, category.name_category FROM products LEFT JOIN category ON products.id_category = category.id WHERE products.name LIKE '%${searchName}%' AND products.id_category LIKE '%${idCat}%' ORDER BY ${sortBy} ${orderBy} LIMIT ${limit} OFFSET ${firstData}`)
+        connection.query(`SELECT products.*, category.name_category FROM products LEFT JOIN category ON products.id_category = category.id WHERE products.name LIKE '%${searchName}%' AND products.id_category LIKE '%${idCat}%' ORDER BY ${sortBy} ${orderBy} LIMIT ${limit} OFFSET ${firstData}`,
           (error, result) => {
             // @ts-ignore
             if (error) reject(new Error(error))
             resolve(result)
           })
       }
+      connection.query(`SELECT products.*, category.name_category FROM products LEFT JOIN category ON products.id_category = category.id WHERE products.name LIKE '%${searchName}%' AND products.id_category LIKE '%${idCat}%'
+        ORDER BY ${sortBy} ${orderBy}`,
+        (error, result) => {
+          // @ts-ignore
+          if (error) reject(new Error(error))
+          resolve(result)
+        })
     })
   },
   posDetail: (posId) => {
@@ -78,11 +70,15 @@ module.exports = {
       })
     })
   },
-  countData: () => {
+  countData: (searchName, idCat, limit, activePage) => {
     return new Promise((resolve, reject) => {
-      connection.query(`SELECT count(products.id) as totalData FROM products`, (error, result) => {
+      const firstData1 = ((limit * activePage) - limit)
+      const sql = `SELECT count(products.id) as totalData FROM products  WHERE products.name LIKE '%${searchName}%' LIMIT ${limit} OFFSET ${firstData1}`
+      console.log(sql, 'inisql')
+      connection.query(`SELECT count(products.id) as totalData FROM products  WHERE products.name LIKE '%${searchName}%' AND products.id_category LIKE '%${idCat}%' LIMIT ${limit}`, (error, result) => {
         // @ts-ignore
         if (error) reject(new Error(error))
+        console.log(result[0])
         resolve(result[0].totalData)
       })
     })

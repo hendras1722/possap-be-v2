@@ -6,27 +6,29 @@ const headerAPI = require('../helpers/apimsa')
 
 module.exports = {
     posAll: async (request, response) => {
-        const limit = request.query.limit
-        const urutkan = request.query.urutkan
-        const activePage = request.query.page || 1
-        const searchName = request.query.searchName || ''
-        const sortBy = request.query.sortBy || 'id'
-        const orderBy = request.query.orderBy || 'ASC'
-        const name_category = request.query.name_category || ''
-        const idCat = request.query.idCat || ''
-        const posId = request.params.posId
-        const result = await posStyle.posAll(limit, activePage, searchName, sortBy, orderBy, name_category, idCat, posId, urutkan)
-        if (limit) {
-            let totalData = await posStyle.countData()
-            const totalPages = Math.ceil((totalData / limit))
-            const pager = {
-                totalPages
-            }
-            myConnection.customResponse(response, 200, result, totalData, pager)
-        } else {
-            myConnection.response(response, 200, result)
-        }
         try {
+            const limit = request.query.limit
+            const urutkan = request.query.urutkan
+            const activePage = request.query.page || 1
+            const searchName = request.query.searchName || ''
+            const sortBy = request.query.sortBy || 'id'
+            const orderBy = request.query.orderBy || 'ASC'
+            const name_category = request.query.name_category || ''
+            const idCat = request.query.idCat || ''
+            const posId = request.params.posId
+            const result = await posStyle.posAll(limit, activePage, searchName, sortBy, orderBy, name_category, idCat, posId, urutkan)
+            if (limit) {
+                let totalData = await posStyle.countData(searchName, idCat, limit, activePage)
+                const totalPages = Math.ceil((totalData / limit))
+                const firstData1 = ((limit * activePage))
+                console.log(totalPages, limit, activePage, firstData1, 'intotalpages')
+                const pager = {
+                    totalPages
+                }
+                myConnection.customResponse(response, 200, result, totalData, pager)
+            } else {
+                myConnection.response(response, 200, result)
+            }
         } catch (error) {
             myConnection.customErrorResponse(response, 404, 'Ups!!! you have problem at posAll')
         }
@@ -74,37 +76,35 @@ module.exports = {
         }
     },
     updateData: async (request, response) => {
-
-        const id = request.params.posId
-        const data = {
-            id,
-            name: request.body.name,
-            description: request.body.description,
-            image: request.body.image,
-            price: request.body.price,
-            stock: request.body.stock,
-            id_category: request.body.id_category,
-            updated_at: new Date()
-        }
-
-        const result = await posStyle.updateData(data)
-        myConnection.response(response, 200, result)
         try {
+            const id = request.params.posId
+            const data = {
+                id,
+                name: request.body.name,
+                description: request.body.description,
+                image: request.body.image,
+                price: request.body.price,
+                stock: request.body.stock,
+                id_category: request.body.id_category,
+                updated_at: new Date()
+            }
+
+            const result = await posStyle.updateData(data)
+            myConnection.response(response, 200, result)
 
         } catch (error) {
             myConnection.customErrorResponse(response, 404, 'Ups!!! you have problem at updateData')
         }
     },
     deleteData: async (request, response) => {
-
-        const posId = request.params.posId
-        const result = await posStyle.deleteData(posId)
-        console.log(posId)
-        const deleteData = {
-            id: parseInt(posId)
-        }
-        myConnection.response(response, 200, deleteData)
         try {
+            const posId = request.params.posId
+            const result = await posStyle.deleteData(posId)
+            console.log(posId)
+            const deleteData = {
+                id: parseInt(posId)
+            }
+            myConnection.response(response, 200, deleteData)
         } catch (error) {
             myConnection.customErrorResponse(response, 404, 'Ups!!! you have problem at updateData')
         }

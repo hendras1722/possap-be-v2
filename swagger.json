@@ -1,0 +1,242 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "2.0.0",
+        "description": "Backend Posapp API V2",
+        "license": {
+            "name": "Muh Syahendra Anindyantoro",
+            "url": "https://github.com/hendras1722"
+        }
+    },
+    "host": "localhost:4000",
+    "paths": {
+        "/pos": {
+            "get": {
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Get all Products in system",
+                "parameters": [
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "limit",
+                        "required": false,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "page",
+                        "required": false,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "searchName",
+                        "in": "query",
+                        "description": "Cari Nama Menu",
+                        "required": false,
+                        "type": "varchar"
+                    },
+                    {
+                        "name": "idCat",
+                        "in": "query",
+                        "description": "Cari Category Menu",
+                        "required": false,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Products"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Post Products",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/PostProductBody"
+                        }
+                    }
+                },
+                "produces": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "Post Products",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/PostProductBody"
+                        }
+                    }
+                ]
+            }
+        },
+        "/pos/{posId}": {
+            "delete": {
+                "tags": [
+                    "Products"
+                ],
+                "parameters": [
+                    {
+                        "name": "posId",
+                        "in": "path",
+                        "description": "posId",
+                        "required": false
+                    }
+                ],
+                "summary": "Delete Products",
+                "responses": {
+                    "200": {
+                        "description": "Ok"
+                    },
+                    "schema": {
+                        "$ref": "#/definitions/Product"
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Update Product",
+                "responses": {
+                    "200": {
+                        "description": "Ok"
+                    },
+                    "schema": {
+                        "$ref": "#/definitions/Product"
+                    }
+                },
+                "produces": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "parameters": [
+                    {
+                        "name": "posId",
+                        "in": "path",
+                        "description": "posId",
+                        "required": false
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "update Products",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/PostProductBody"
+                        }
+                    }
+                ]
+            }
+        },
+        "/category": {
+            "get": {
+                "tags": [
+                    "Category"
+                ],
+                "summary": "GET Category",
+                "responses": {
+                    "200": {
+                        "description": "Ok"
+                    },
+                    "schema": {
+                        "$ref": "#/definitions/Category"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "Category": {
+            "type": "object",
+            "properties": {
+                "name_category": {
+                    "type": "integer"
+                }
+            }
+        },
+        "PostProductBody": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "varchar",
+                    "example": "MSA"
+                },
+                "description": {
+                    "type": "text"
+                },
+                "price": {
+                    "type": "integer"
+                },
+                "image": {
+                    "type": "varchar"
+                },
+                "stock": {
+                    "type": "integer"
+                },
+                "id_category": {
+                    "type": "integer"
+                }
+            }
+        },
+        "Product": {
+            "properties": {
+                "id": {
+                    "type": "varchar"
+                },
+                "name": {
+                    "type": "varchar"
+                },
+                "description": {
+                    "type": "text"
+                },
+                "image": {
+                    "type": "varchar"
+                },
+                "price": {
+                    "type": "integer"
+                },
+                "stock": {
+                    "type": "integer"
+                },
+                "id_category": {
+                    "type": "integer"
+                },
+                "created_at": {
+                    "type": "timestamp"
+                },
+                "updated_at": {
+                    "type": "timestamp"
+                }
+            }
+        },
+        "Products": {
+            "type": "array",
+            "$ref": "#/definitions/Product"
+        }
+    },
+    "schemes": [
+        "http"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ]
+}
