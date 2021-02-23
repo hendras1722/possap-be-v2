@@ -14,14 +14,15 @@ module.exports = {
             if (error) reject(new Error(error))
             resolve(result)
           })
+      } else {
+        connection.query(`SELECT products.*, category.name_category FROM products LEFT JOIN category ON products.id_category = category.id WHERE products.name LIKE '%${searchName}%' AND products.id_category LIKE '%${idCat}%'
+          ORDER BY ${sortBy} ${orderBy}`,
+          (error, result) => {
+            // @ts-ignore
+            if (error) reject(new Error(error))
+            resolve(result)
+          })
       }
-      connection.query(`SELECT products.*, category.name_category FROM products LEFT JOIN category ON products.id_category = category.id WHERE products.name LIKE '%${searchName}%' AND products.id_category LIKE '%${idCat}%'
-        ORDER BY ${sortBy} ${orderBy}`,
-        (error, result) => {
-          // @ts-ignore
-          if (error) reject(new Error(error))
-          resolve(result)
-        })
     })
   },
   posDetail: (posId) => {
