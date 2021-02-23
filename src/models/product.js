@@ -30,15 +30,13 @@ module.exports = {
       connection.query('SELECT * FROM products WHERE id = ?', posId, (error, result) => {
         // @ts-ignore
         if (error) reject(new Error(error))
-        resolve(result)
+        resolve(result[0])
       })
     })
   },
   insertData: (data) => {
     return new Promise((resolve, reject) => {
-      connection.query('ALTER TABLE products AUTO_INCREMENT = 1')
-      connection.query('INSERT INTO products SET ?', data)
-      connection.query(`SELECT products.*, category.name_category FROM products LEFT JOIN category ON products.id_category = category.id`, (error, result) => {
+      connection.query('INSERT INTO products SET ?', data, (error, result) => {
         // @ts-ignore
         if (error) reject(new Error(error))
         resolve(result)
@@ -60,13 +58,8 @@ module.exports = {
 
   deleteData: (posId) => {
     return new Promise((resolve, reject) => {
-      connection.query('DELETE FROM products WHERE id = ?', posId)
-      connection.query('SELECT products.*, category.name_category FROM products LEFT JOIN category ON products.id_category = category.id', (error, result) => {
-        // @ts-ignore
+      connection.query('DELETE FROM products WHERE id = ?', posId, (error, result) => {
         if (error) reject(new Error(error))
-        // connectio?n.query('ALTER TABLE products AUTO_INCREMENT = 1')
-        connection.query('ALTER TABLE products DROP id')
-        connection.query('ALTER TABLE products ADD id INT NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST')
         resolve(result)
       })
     })

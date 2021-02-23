@@ -8,11 +8,37 @@
             "url": "https://github.com/hendras1722"
         }
     },
-    "host": "backend-posaap.herokuapp.com/",
+    "host": "localhost:4000",
     "servers": {
-        "url": "backend-posaap.herokuapp.com/"
+        "url": "localhost:4000"
     },
     "paths": {
+        "/hdfs/upload": {
+            "post": {
+                "tags": [
+                    "Upload"
+                ],
+                "summary": "upload image copy url",
+                "consumes": "multipart/form-data",
+                "parameters": [
+                    {
+                        "in": "formData",
+                        "name": "image",
+                        "type": "file",
+                        "description": "copy url"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Upload"
+                        }
+                    }
+                },
+                "x-swagger-router-controller": "Default"
+            }
+        },
         "/pos": {
             "get": {
                 "tags": [
@@ -165,6 +191,14 @@
         }
     },
     "definitions": {
+        "Upload": {
+            "type": "object",
+            "properties": {
+                "url": {
+                    "type": "varchar"
+                }
+            }
+        },
         "Category": {
             "type": "object",
             "properties": {
@@ -234,7 +268,6 @@
         }
     },
     "schemes": [
-        "https",
         "http"
     ],
     "consumes": [

@@ -3,6 +3,8 @@ const myConnection = require('../helpers/status')
 const schema = require('../schema/schema')
 const { v4 } = require('uuid')
 const headerAPI = require('../helpers/apimsa')
+const path = require('path')
+const fs = require('fs')
 
 module.exports = {
     posAll: async (request, response) => {
@@ -43,34 +45,35 @@ module.exports = {
         }
     },
     insertData: async (request, response) => {
-        try {
-            const validation = schema.productSchema.validate(request.body)
-            if (validation.error) {
-                myConnection.responseValidation(response, 200, validation.error.details)
-            } else {
-                const {
-                    name,
-                    description,
-                    price,
-                    image,
-                    stock,
-                    id_category
-                } = request.body
+        const validation = schema.productSchema.validate(request.body)
+        if (validation.error) {
+            myConnection.responseValidation(response, 200, validation.error.details)
+        } else {
+            const {
+                name,
+                description,
+                price,
+                image,
+                stock,
+                id_category
+            } = request.body
 
-                const data = {
-                    id: v4(),
-                    name,
-                    description,
-                    image,
-                    price,
-                    stock,
-                    id_category
-                }
-
-                const result = await posStyle.insertData(data)
-
-                myConnection.response(response, 200, result, 'Success Uploaded')
+            const data = {
+                name,
+                description,
+                image,
+                price,
+                stock,
+                id_category,
+                id: v4()
             }
+
+            const result = await posStyle.insertData(data)
+
+            myConnection.response(response, 200, result, 'Success Uploaded')
+        }
+        try {
+
         } catch (error) {
             myConnection.customErrorResponse(response, 404, 'Ups!!! you have problem at insertData or File not recruitment')
         }
@@ -97,14 +100,15 @@ module.exports = {
         }
     },
     deleteData: async (request, response) => {
+        const posId = request.params.posId
+        const checkData = await posStyle.posDetail(posId)
         try {
-            const posId = request.params.posId
-            const checkData = await posStyle.posDetail(posId)
             checkImage = checkData.image.split("/")
             if (checkData) {
                 const result = await posStyle.deleteData(posId)
-                const path = "/possap-be-v2/uploads/" + checkImage[4]
-                fs.unlink(path, (err) => {
+                const pathNya = path.join(__dirname + "/../uploads/" + checkImage[4])
+                console.log(path.join(__dirname + "/../uploads/" + checkImage[4]))
+                fs.unlink(pathNya, (err) => {
                     if (err) return console.log(err, 'inierror')
                     console.log('File deleted!');
                 });
@@ -118,12 +122,6 @@ module.exports = {
                     status: 400
                 })
             }
-            // const posId = request.params.posId
-            // const result = await posStyle.deleteData(posId)
-            // console.log(posId)
-            // const deleteData = {
-            //     id: parseInt(posId)
-            // }
         } catch (error) {
             myConnection.customErrorResponse(response, 404, 'Ups!!! you have problem at updateData')
         }
