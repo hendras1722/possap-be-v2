@@ -8,7 +8,7 @@
             "url": "https://github.com/hendras1722"
         }
     },
-    "host": "localhost:4000",
+    "host": "https://backend-posaap.herokuapp.com/",
     "paths": {
         "/pos": {
             "get": {
