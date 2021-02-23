@@ -99,12 +99,31 @@ module.exports = {
     deleteData: async (request, response) => {
         try {
             const posId = request.params.posId
-            const result = await posStyle.deleteData(posId)
-            console.log(posId)
-            const deleteData = {
-                id: parseInt(posId)
+            const checkData = await posStyle.posDetail(posId)
+            checkImage = checkData.image.split("/")
+            if (checkData) {
+                const result = await posStyle.deleteData(posId)
+                const path = "/possap-be-v2/uploads/" + checkImage[4]
+                fs.unlink(path, (err) => {
+                    if (err) return console.log(err, 'inierror')
+                    console.log('File deleted!');
+                });
+                response.status(200).json({
+                    status: 200,
+                    message: "Data Berhasil Dihapus"
+                })
+            } else {
+                response.status(400).json({
+                    message: "Data Tidak Ada atau Data sudah terhapus",
+                    status: 400
+                })
             }
-            myConnection.response(response, 200, deleteData)
+            // const posId = request.params.posId
+            // const result = await posStyle.deleteData(posId)
+            // console.log(posId)
+            // const deleteData = {
+            //     id: parseInt(posId)
+            // }
         } catch (error) {
             myConnection.customErrorResponse(response, 404, 'Ups!!! you have problem at updateData')
         }
