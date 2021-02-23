@@ -8,9 +8,9 @@
             "url": "https://github.com/hendras1722"
         }
     },
-    "host": "localhost:4000",
+    "host": "backend-posaap.herokuapp.com/",
     "servers": {
-        "url": "localhost:4000"
+        "url": "backend-posaap.herokuapp.com/"
     },
     "paths": {
         "/hdfs/upload": {
@@ -268,7 +268,7 @@
         }
     },
     "schemes": [
-        "http"
+        "https"
     ],
     "consumes": [
         "application/json"
