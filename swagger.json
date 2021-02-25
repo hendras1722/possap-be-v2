@@ -8,11 +8,86 @@
             "url": "https://github.com/hendras1722"
         }
     },
-    "host": "backend-posaap.herokuapp.com/",
+    "host": "backend-posaap.herokuapp.com",
     "servers": {
-        "url": "backend-posaap.herokuapp.com/"
+        "url": "backend-posaap.herokuapp.com"
     },
     "paths": {
+        "/user": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get User",
+                "responses": {
+                    "200": {
+                        "description": "Ok"
+                    }
+                }
+            }
+        },
+        "/user/login": {
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Login User",
+                "responses": {
+                    "200": {
+                        "description": "Ok"
+                    }
+                },
+                "schema": {
+                    "$ref": "#/definitions/UserLogin"
+                },
+                "produces": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "Login User",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/UserLogin"
+                        }
+                    }
+                ]
+            }
+        },
+        "/user/register": {
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "ADD User",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    }
+                },
+                "produces": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "Post User",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    }
+                ]
+            }
+        },
         "/hdfs/upload": {
             "post": {
                 "tags": [
@@ -65,7 +140,7 @@
                         "in": "query",
                         "description": "Cari Nama Menu",
                         "required": false,
-                        "type": "varchar"
+                        "type": "string"
                     },
                     {
                         "name": "idCat",
@@ -111,6 +186,61 @@
                             "$ref": "#/definitions/PostProductBody"
                         }
                     }
+                ]
+            }
+        },
+        "/user/{posId}": {
+            "delete": {
+                "tags": [
+                    "User"
+                ],
+                "parameters": [
+                    {
+                        "name": "posId",
+                        "in": "path",
+                        "description": "Delete User",
+                        "required": true
+                    }
+                ],
+                "summary": "ID User",
+                "responses": {
+                    "200": {
+                        "description": "Ok"
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "User"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ok"
+                    },
+                    "schema": {
+                        "$ref": "#/definitions/User"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "posId",
+                        "in": "path",
+                        "description": "ID User",
+                        "required": true
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "Update User",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json",
+                    "aplication/xml"
                 ]
             }
         },
@@ -173,6 +303,64 @@
                 ]
             }
         },
+        "/category/{posId}": {
+            "delete": {
+                "tags": [
+                    "Category"
+                ],
+                "summary": "Delete Products",
+                "responses": {
+                    "200": {
+                        "description": "Ok"
+                    },
+                    "schema": {
+                        "$ref": "#/definitions/Category"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "posId",
+                        "in": "path",
+                        "required": true
+                    }
+                ]
+            },
+            "patch": {
+                "tags": [
+                    "Category"
+                ],
+                "summary": "Patch Products",
+                "responses": {
+                    "200": {
+                        "description": "Ok"
+                    },
+                    "schema": {
+                        "$ref": "#/definitions/Category"
+                    }
+                },
+                "produces": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "parameters": [
+                    {
+                        "name": "posId",
+                        "in": "path",
+                        "description": "posId",
+                        "required": false
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "update Products",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Category"
+                        }
+                    }
+                ]
+            }
+        },
         "/category": {
             "get": {
                 "tags": [
@@ -187,15 +375,75 @@
                         "$ref": "#/definitions/Category"
                     }
                 }
+            },
+            "post": {
+                "tags": [
+                    "Category"
+                ],
+                "summary": "POST Category",
+                "responses": {
+                    "200": {
+                        "description": "Ok"
+                    },
+                    "schema": {
+                        "$ref": "#/definitions/Category"
+                    }
+                },
+                "produces": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "parameters": [
+                    {
+                        "name": "name_category",
+                        "in": "body",
+                        "description": "Name Category",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Category"
+                        }
+                    }
+                ],
+                "schema": {
+                    "$ref": "#/definitions/Category"
+                }
             }
         }
     },
     "definitions": {
+        "UserLogin": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "User": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "Status": {
+                    "type": "integer"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
         "Upload": {
             "type": "object",
             "properties": {
                 "url": {
-                    "type": "varchar"
+                    "type": "string"
                 }
             }
         },
@@ -203,7 +451,7 @@
             "type": "object",
             "properties": {
                 "name_category": {
-                    "type": "integer"
+                    "type": "string"
                 }
             }
         },
@@ -211,17 +459,17 @@
             "type": "object",
             "properties": {
                 "name": {
-                    "type": "varchar",
-                    "example": "MSA"
+                    "type": "string",
+                    "example": "string"
                 },
                 "description": {
-                    "type": "text"
+                    "type": "string"
                 },
                 "price": {
                     "type": "integer"
                 },
                 "image": {
-                    "type": "varchar"
+                    "type": "string"
                 },
                 "stock": {
                     "type": "integer"
@@ -234,16 +482,16 @@
         "Product": {
             "properties": {
                 "id": {
-                    "type": "varchar"
+                    "type": "string"
                 },
                 "name": {
-                    "type": "varchar"
+                    "type": "string"
                 },
                 "description": {
-                    "type": "text"
+                    "type": "string"
                 },
                 "image": {
-                    "type": "varchar"
+                    "type": "string"
                 },
                 "price": {
                     "type": "integer"

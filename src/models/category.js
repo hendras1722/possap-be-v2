@@ -27,8 +27,7 @@ module.exports = {
     },
     InsertCategory: (data) => {
         return new Promise((resolve, reject) => {
-            connection.query('INSERT INTO category SET ?', data)
-            connection.query('SELECT category.* FROM category', (error, result) => {
+            connection.query('INSERT INTO category SET ?', data, (error, result) => {
                 if (error) reject(new Error(error))
                 resolve(result)
             })
@@ -37,8 +36,7 @@ module.exports = {
     UpdateCategory: (data) => {
         const posId = data.id
         return new Promise((resolve, reject) => {
-            connection.query('UPDATE category SET ? WHERE id = ?', [data, posId])
-            connection.query('SELECT category.* FROM category', (error, result) => {
+            connection.query('UPDATE category SET ? WHERE id = ?', [data, posId], (error, result) => {
                 if (error) reject(new Error(error))
                 resolve(result)
             })

@@ -1,5 +1,6 @@
 const posStyle = require('../models/category')
 const myConnection = require('../helpers/status')
+const { uuid } = require('uuidv4')
 
 module.exports = {
     AllCategory: async (request, response) => {
@@ -31,6 +32,7 @@ module.exports = {
         } = request.body
 
         const data = {
+            id: uuid(),
             name_category,
             created_at: new Date(),
             updated_at: new Date()
@@ -49,7 +51,7 @@ module.exports = {
             const data = {
                 id,
                 name_category: request.body.name_category,
-                updated_at: new Date()
+                updated_at: new Date().toISOString()
             }
 
             const result = await posStyle.UpdateCategory(data)
@@ -62,11 +64,10 @@ module.exports = {
         try {
             const posId = request.params.posId
             const result = await posStyle.DeleteCategory(posId)
-            console.log(posId)
-            const deleteCategory = {
-                id: parseInt(posId)
-            }
-            myConnection.response(response, 200, deleteCategory)
+            response.status(200).json({
+                status: 200,
+                result: "Data Berhasil Dihapus"
+            })
         } catch (error) {
             myConnection.customErrorResponse(response, 404, 'Ups!!! you have problem at DeleteCategory')
         }
