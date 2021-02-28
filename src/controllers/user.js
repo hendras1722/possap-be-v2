@@ -38,7 +38,7 @@ module.exports = {
     },
     UpdateUser: async (request, response) => {
         try {
-            const salt = helper.generateSalt(16)
+            const salt = await brcypt.genSalt(10)
             const posId = request.params.posId
             const hashPassword = helper.setPassword(request.body.password, salt)
             const data = {
