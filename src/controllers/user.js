@@ -45,8 +45,8 @@ module.exports = {
                 name: request.body.name,
                 email: request.body.email,
                 Status: request.body.Status,
-                salt: hashPassword.salt,
-                password: hashPassword.passwordHash,
+                salt: salt,
+                password: hashPassword,
                 created_at: new Date(),
                 updated_at: new Date()
             }
