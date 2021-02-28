@@ -40,7 +40,7 @@ module.exports = {
         try {
             const salt = await brcypt.genSalt(10)
             const posId = request.params.posId
-            const hashPassword = helper.setPassword(request.body.password, salt)
+            const hashPassword = await brcypt.hash(request.body.password, salt)
             const data = {
                 name: request.body.name,
                 email: request.body.email,
