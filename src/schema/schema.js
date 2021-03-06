@@ -42,7 +42,7 @@ const schema = {
             'number.min': `stock should have a minimum length of {#limit}`,
             'any.required': `stock is a required field`
         }),
-        id_category: Joi.number().empty("").required().messages({
+        id_category: Joi.string().empty("").required().messages({
             'number.base': `category should be a type of 'number'`,
             'number.empty': `category cannot be an empty field`,
             'number.min': `category should have a minimum length of {#limit}`,
